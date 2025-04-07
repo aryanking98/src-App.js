@@ -1,0 +1,49 @@
+import React, { useState } from "react"; import { Button } from "@/components/ui/button"; import { Card, CardContent } from "@/components/ui/card"; import { motion } from "framer-motion";
+
+const characters = [ { id: 1, name: "Tectra Flame", power: 80 }, { id: 2, name: "Tectra Frost", power: 75 }, { id: 3, name: "Tectra Storm", power: 85 }, ];
+
+const getRandomEnemy = () => { const enemies = [ { name: "Rogue Bot", power: 70 }, { name: "Cyber Fiend", power: 90 }, { name: "Shadow Hacker", power: 78 }, ]; return enemies[Math.floor(Math.random() * enemies.length)]; };
+
+export default function TectraGame() { const [selected, setSelected] = useState(null); const [enemy, setEnemy] = useState(null); const [result, setResult] = useState("");
+
+const startBattle = () => { if (!selected) return; const newEnemy = getRandomEnemy(); setEnemy(newEnemy); const outcome = selected.power >= newEnemy.power ? "You Win!" : "You Lose!"; setResult(outcome); };
+
+return ( <div className="p-4 max-w-xl mx-auto"> <h1 className="text-3xl font-bold mb-4">Tectra Arena</h1> <p className="mb-4">Choose your Tectra NFT Hero and fight in the cyber arena.</p>
+
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    {characters.map((char) => (
+      <Card
+        key={char.id}
+        className={`cursor-pointer ${selected?.id === char.id ? "ring-4 ring-blue-500" : ""}`}
+        onClick={() => setSelected(char)}
+      >
+        <CardContent className="p-4 text-center">
+          <h2 className="text-xl font-semibold">{char.name}</h2>
+          <p>Power: {char.power}</p>
+        </CardContent>
+      </Card>
+    ))}
+  </div>
+
+  <Button onClick={startBattle} disabled={!selected} className="w-full">
+    Fight!
+  </Button>
+
+  {enemy && (
+    <motion.div
+      className="mt-6 p-4 bg-gray-800 text-white rounded-xl shadow-xl"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
+      <h3 className="text-xl font-bold">Enemy: {enemy.name}</h3>
+      <p>Power: {enemy.power}</p>
+      <h2 className="mt-4 text-2xl font-semibold">{result}</h2>
+    </motion.div>
+  )}
+
+  <div className="mt-10 text-center text-sm text-gray-500">
+    Created by @aryan5450 on Discord / @Aryan_Hovved on X
+  </div>
+</div>
+
+); }
